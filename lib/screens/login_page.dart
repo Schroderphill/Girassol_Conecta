@@ -1,32 +1,53 @@
 import 'package:flutter/material.dart';
 import '../widgets/sunflower_icon.dart';
 import '../theme/app_colors.dart';
+import 'package:gc_flutter_app/services/auth_service.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
-  final Function(String email, String password) onLogin;
-
-  const LoginPage({super.key, required this.onLogin});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+
+  bool _loading = false;
   bool _obscurePassword = true;
 
-  void _handleSubmit() {
-    if (_formKey.currentState!.validate()) {
-      widget.onLogin(_emailController.text, _passwordController.text);
+  Future<void> _handleSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _loading = true);
+
+    bool success = await AuthService.login(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+
+    setState(() => _loading = false);
+
+    if (success) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
+        (route) => false,
+      );
+    } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Falha no login")),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Adicione esta linha
+      resizeToAvoidBottomInset: true,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -41,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(24.0),
               child: Card(
                 elevation: 8,
-                
                 color: AppColors.card.withOpacity(0.95),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -144,20 +164,31 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                  onPressed: _handleSubmit,
-                                  child: const Text(
-                                    'Entrar',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
+                                  onPressed: _loading ? null : _handleSubmit,
+                                  child: _loading
+                                      ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Entrar',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                 ),
                               ),
                               const SizedBox(height: 16),
                               Center(
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    // TODO: implementar "Esqueceu a senha"
+                                  },
                                   child: const Text(
                                     'Esqueceu sua senha?',
                                     style: TextStyle(

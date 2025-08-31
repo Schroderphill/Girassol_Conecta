@@ -1,21 +1,39 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AuthService {
-  bool _isLoggedIn = false;
+  static const String baseUrl = "http://10.0.2.2/gc_api"; // URL base da API
 
-  Future<bool> login(String email, String password) async {
-    // Simula chamada de API com atraso
-    await Future.delayed(const Duration(seconds: 1));
+  static Future<bool> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/login.php"),
+      body: {'email': email, 'password': password},
+    );
 
-    // Login mockado: altere depois para integração real
-    if (email == "teste@girassol.com" && password == "123456") {
-      _isLoggedIn = true;
-      return true;
+    try {
+      final data = json.decode(response.body);
+
+      if (data['status'] == 'success') {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString("userEmail", data['user']['email']);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print("Erro ao decodificar resposta: ${response.body}");
+      return false;
     }
-    return false;
   }
 
-  void logout() {
-    _isLoggedIn = false;
+  static Future<void> logout() async {
+    await http.post(Uri.parse("$baseUrl/logout.php"));
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 
-  bool get isLoggedIn => _isLoggedIn;
+  static Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey("userEmail");
+  }
 }
