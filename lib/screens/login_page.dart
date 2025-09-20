@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _obscurePassword = true;
   bool loading = false;
-  bool isLogin = true; // ✅ alterna entre login/cadastro
+  bool isLogin = true; //  alterna entre login/cadastro
 
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 32),
 
-                      // 🔹 Formulário dinâmico
+                      // Formulário dinâmico
                       Form(
                         key: _formKey,
                         child: Column(
@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 32),
 
-                            // 🔹 Botão
+                            // Botão
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 16),
 
-                            // 🔹 Alternar entre login e cadastro
+                            // Alternar entre login e cadastro
                             Center(
                               child: TextButton(
                                 onPressed: () {
