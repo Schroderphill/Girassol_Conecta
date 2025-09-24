@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color.fromRGBO(251, 191, 36, 1); // amber-400
-  static const Color primaryForeground = Color.fromRGBO(120, 53, 15, 1); // amber-950
-  static const Color girassolBg = Color.fromRGBO(254, 252, 232, 1); // amber-50
-  static const Color girassolLight = Color.fromRGBO(254, 240, 138, 1); // amber-200
-  static const Color girassolDark = Color.fromRGBO(120, 53, 15, 1); // amber-950
-  static const Color girassolMuted = Color.fromRGBO(146, 64, 14, 1); // amber-800
-  static const Color card = Color.fromRGBO(255, 255, 255, 1);
-  static const Color border = Color.fromRGBO(229, 231, 235, 1);
+  // Paleta principal
+  static const Color primary = Color(0xFFFBBF24); // Amber 400 (girassol)
+  static const Color primaryDark = Color(0xFFB45309); // Amber 800
+  static const Color accent = Color(0xFF6366F1); // Indigo 500
+
+  // Fundo
+  static const Color background = Color(0xFFF9FAFB); // cinza claro
+  static const Color surface = Colors.white;
+
+  // Texto
+  static const Color textPrimary = Color(0xFF111827); // quase preto
+  static const Color textSecondary = Color(0xFF6B7280); // cinza médio
+
+  // Estados
+  static const Color success = Color(0xFF10B981); // verde
+  static const Color warning = Color(0xFFF59E0B); // laranja
+  static const Color error = Color(0xFFEF4444); // vermelho
 }

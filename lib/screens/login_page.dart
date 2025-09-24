@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _obscurePassword = true;
   bool loading = false;
-  bool isLogin = true; //  alterna entre login/cadastro
+  bool isLogin = true; // alterna entre login/cadastro
 
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -27,13 +27,11 @@ class _LoginPageState extends State<LoginPage> {
 
     bool success = false;
     if (isLogin) {
-      // Login
       success = await AuthService.login(
         _emailController.text,
         _passwordController.text,
       );
     } else {
-      // Cadastro
       success = await AuthService.register(
         _nameController.text,
         _emailController.text,
@@ -43,8 +41,12 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => loading = false);
 
+    if (!mounted) {
+      return; // evita acessar o context se o widget já foi desmontado.
+    }
+
     if (success) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/overview');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -63,18 +65,15 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [AppColors.girassolBg, AppColors.girassolLight],
+            colors: [AppColors.background, AppColors.surface],
           ),
         ),
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Card(
-              elevation: 8,
-              color: AppColors.card.withOpacity(0.95),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
+              elevation: Theme.of(context).cardTheme.elevation,
+              shape: Theme.of(context).cardTheme.shape,
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: ConstrainedBox(
@@ -84,39 +83,32 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       const SunflowerIcon(size: 64),
                       const SizedBox(height: 24),
+
+                      // Título dinâmico
                       Text(
                         isLogin ? 'Login' : 'Cadastro',
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.girassolDark,
-                        ),
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 8),
+
                       Text(
                         isLogin
                             ? 'Entre para continuar'
                             : 'Crie sua conta para continuar',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColors.girassolMuted,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 32),
 
-                      // Formulário dinâmico
+                      // Formulário
                       Form(
                         key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (!isLogin) ...[
-                              const Text(
+                              Text(
                                 'Nome',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.girassolDark,
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               const SizedBox(height: 8),
                               TextFormField(
@@ -135,12 +127,9 @@ class _LoginPageState extends State<LoginPage> {
                               const SizedBox(height: 24),
                             ],
 
-                            const Text(
+                            Text(
                               'Email',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.girassolDark,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
@@ -162,12 +151,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 24),
 
-                            const Text(
+                            Text(
                               'Senha',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.girassolDark,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
@@ -180,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                     _obscurePassword
                                         ? Icons.visibility_off
                                         : Icons.visibility,
-                                    color: AppColors.girassolMuted,
+                                    color: AppColors.textSecondary,
                                   ),
                                   onPressed: () {
                                     setState(() {
@@ -208,20 +194,16 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: loading ? null : _handleSubmit,
                                 child: loading
                                     ? const CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                      )
-                                    : Text(
-                                        isLogin ? 'Entrar' : 'Cadastrar',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white,
                                         ),
-                                      ),
+                                      )
+                                    : Text(isLogin ? 'Entrar' : 'Cadastrar'),
                               ),
                             ),
                             const SizedBox(height: 16),
 
-                            // Alternar entre login e cadastro
+                            // Alternar entre login/cadastro
                             Center(
                               child: TextButton(
                                 onPressed: () {
@@ -233,9 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                                   isLogin
                                       ? 'Não tem conta? Registre-se'
                                       : 'Já tem conta? Entrar',
-                                  style: const TextStyle(
-                                    color: AppColors.girassolMuted,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               ),
                             ),

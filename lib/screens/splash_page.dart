@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
     if (mounted) {
       if (isLoggedIn) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/overview');
       } else {
         Navigator.pushReplacementNamed(context, '/login');
       }
@@ -31,21 +31,23 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppColors.girassolBg,
+    return Scaffold(
+      backgroundColor: AppColors.background, // padronizado
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wb_sunny, size: 80, color: AppColors.girassolDark),
-            SizedBox(height: 16),
+            const Icon(Icons.wb_sunny, size: 80, color: AppColors.primary),
+            const SizedBox(height: 16),
             Text(
               'Girassol Conecta',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.girassolDark,
-              ),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+            ),
+            const SizedBox(height: 24),
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
             ),
           ],
         ),

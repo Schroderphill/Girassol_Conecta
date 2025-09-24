@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 //import '../widgets/sunflower_icon.dart';
 import '../theme/app_colors.dart';
 import 'package:gc_flutter_app/services/auth_service.dart';
-import 'login_page.dart';
+import 'login_page.dart';*/
 
 
-class HomePage extends StatefulWidget {
+/*class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
-}
+}*/
 
-class _HomePageState extends State<HomePage> {
+/*class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   void _logout(BuildContext context) async {
@@ -127,4 +127,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
+}*/
