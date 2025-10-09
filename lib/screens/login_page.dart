@@ -12,7 +12,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
+  // Controllers
   final _nameController = TextEditingController();
+  final _nomeSocialController = TextEditingController();
+  final _cpfController = TextEditingController();
+  final _cnsController = TextEditingController();
+  final _dataNascimentoController = TextEditingController();
+  final _contatoController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -25,15 +32,21 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => loading = true);
 
-    bool success = false;
+    Map<String, dynamic> result;
+
     if (isLogin) {
-      success = await AuthService.login(
+      result = await AuthService.login(
         _emailController.text,
         _passwordController.text,
       );
     } else {
-      success = await AuthService.register(
+      result = await AuthService.register(
         _nameController.text,
+        _nomeSocialController.text,
+        _cpfController.text,
+        _cnsController.text,
+        _dataNascimentoController.text,
+        _contatoController.text,
         _emailController.text,
         _passwordController.text,
       );
@@ -41,16 +54,30 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => loading = false);
 
-    if (!mounted) {
-      return; // evita acessar o context se o widget já foi desmontado.
-    }
+    if (!mounted) return;
 
-    if (success) {
-      Navigator.pushReplacementNamed(context, '/overview');
+    if (result["success"] == true) {
+      String role = result["role"] ?? "usuario";
+
+      switch (role) {
+        case "admin":
+          Navigator.pushReplacementNamed(context, '/admin');
+          break;
+        case "profissional":
+          Navigator.pushReplacementNamed(context, '/profissional');
+          break;
+        case "voluntario":
+          Navigator.pushReplacementNamed(context, '/voluntario');
+          break;
+        case "usuario":
+        default:
+          Navigator.pushReplacementNamed(context, '/usuario');
+          break;
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(isLogin ? "Falha no login" : "Falha no cadastro"),
+          content: Text(result["message"] ?? (isLogin ? "Falha no login" : "Falha no cadastro")),
         ),
       );
     }
@@ -82,15 +109,12 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SunflowerIcon(size: 64),
-                      const SizedBox(height: 24),
-
-                      // Título dinâmico
+                      const SizedBox(height: 24),                      
                       Text(
                         isLogin ? 'Login' : 'Cadastro',
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                      const SizedBox(height: 8),
-
+                      const SizedBox(height: 8),                    
                       Text(
                         isLogin
                             ? 'Entre para continuar'
@@ -98,52 +122,90 @@ class _LoginPageState extends State<LoginPage> {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 32),
-
-                      // Formulário
+                     
                       Form(
                         key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (!isLogin) ...[
-                              Text(
-                                'Nome',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
+                              // Nome
+                              Text('Nome', style: Theme.of(context).textTheme.bodyLarge),
                               const SizedBox(height: 8),
                               TextFormField(
                                 controller: _nameController,
-                                decoration: const InputDecoration(
-                                  hintText: 'Seu nome completo',
-                                ),
+                                decoration: const InputDecoration(hintText: 'Seu nome completo'),
                                 validator: (value) {
-                                  if (!isLogin &&
-                                      (value == null || value.isEmpty)) {
+                                  if (value == null || value.isEmpty) {
                                     return 'Por favor, insira seu nome';
                                   }
                                   return null;
                                 },
                               ),
+                              const SizedBox(height: 16),
+
+                              // Nome Social
+                              Text('Nome Social', style: Theme.of(context).textTheme.bodyLarge),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _nomeSocialController,
+                                decoration: const InputDecoration(hintText: 'Nome social (opcional)'),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // CPF
+                              Text('CPF', style: Theme.of(context).textTheme.bodyLarge),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _cpfController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(hintText: '000.000.000-00'),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // CNS
+                              Text('CNS', style: Theme.of(context).textTheme.bodyLarge),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _cnsController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(hintText: 'Número do CNS'),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Data de Nascimento
+                              Text('Data de Nascimento', style: Theme.of(context).textTheme.bodyLarge),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _dataNascimentoController,
+                                keyboardType: TextInputType.datetime,
+                                decoration: const InputDecoration(hintText: 'dd/mm/aaaa'),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Contato
+                              Text('Contato', style: Theme.of(context).textTheme.bodyLarge),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _contatoController,
+                                keyboardType: TextInputType.phone,
+                                decoration: const InputDecoration(hintText: '(00) 00000-0000'),
+                              ),
                               const SizedBox(height: 24),
                             ],
 
-                            Text(
-                              'Email',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
+                            // Email
+                            Text('Email', style: Theme.of(context).textTheme.bodyLarge),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
-                              decoration: const InputDecoration(
-                                hintText: 'seu@email.com',
-                              ),
+                              decoration: const InputDecoration(hintText: 'seu@email.com'),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Por favor, insira seu email';
                                 }
-                                if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                                    .hasMatch(value)) {
+                                if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                                   return 'Email inválido';
                                 }
                                 return null;
@@ -151,10 +213,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 24),
 
-                            Text(
-                              'Senha',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
+                            // Senha
+                            Text('Senha', style: Theme.of(context).textTheme.bodyLarge),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _passwordController,
@@ -187,23 +247,19 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 32),
 
-                            // Botão
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: loading ? null : _handleSubmit,
                                 child: loading
                                     ? const CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white,
-                                        ),
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                       )
                                     : Text(isLogin ? 'Entrar' : 'Cadastrar'),
                               ),
                             ),
                             const SizedBox(height: 16),
 
-                            // Alternar entre login/cadastro
                             Center(
                               child: TextButton(
                                 onPressed: () {

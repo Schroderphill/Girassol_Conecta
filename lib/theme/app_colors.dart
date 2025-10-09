@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Paleta principal
-  static const Color primary = Color(0xFFFBBF24); // Amber 400 (girassol)
+  static const Color primary = Color.fromARGB(238, 240, 209, 55); // Amber 400 (girassol)
   static const Color primaryDark = Color(0xFFB45309); // Amber 800
   static const Color accent = Color(0xFF6366F1); // Indigo 500
 

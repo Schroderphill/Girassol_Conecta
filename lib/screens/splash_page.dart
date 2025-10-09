@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_colors.dart';
 import '../services/auth_service.dart';
 
@@ -20,12 +21,30 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 2)); // tempo da splash
     bool isLoggedIn = await AuthService.isLoggedIn();
 
-    if (mounted) {
-      if (isLoggedIn) {
-        Navigator.pushReplacementNamed(context, '/overview');
-      } else {
-        Navigator.pushReplacementNamed(context, '/login');
+    if (!mounted) return;
+
+    if (isLoggedIn) {
+      // Recuperar a role salva no login
+      final prefs = await SharedPreferences.getInstance();
+      String role = prefs.getString('userRole') ?? 'usuario';
+
+      switch (role) {
+        case "admin":
+          Navigator.pushReplacementNamed(context, '/admin');
+          break;
+        case "profissional":
+          Navigator.pushReplacementNamed(context, '/profissional');
+          break;
+        case "voluntario":
+          Navigator.pushReplacementNamed(context, '/voluntario');
+          break;
+        case "usuario":
+        default:
+          Navigator.pushReplacementNamed(context, '/usuario');
+          break;
       }
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 

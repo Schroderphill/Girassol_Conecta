@@ -31,7 +31,7 @@ class SummaryCard extends StatelessWidget {
               Icon(
                 icon,
                 size: 36,
-                color: AppColors.primary,
+                color: const Color(0xF8F2EC48),
               ),
               const Spacer(),
               Text(

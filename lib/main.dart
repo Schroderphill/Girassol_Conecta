@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_page.dart';
 import 'screens/login_page.dart';
-import 'screens/overview_screen.dart';
+//import 'screens/overview_screen.dart';
+import 'screens/profissionais_screen.dart';
+import 'screens/admin/admin_home.dart';
+import 'screens/usuario/usuario_home.dart';
 
 void main() {
   runApp(const GirassolConectaApp());
@@ -21,7 +24,18 @@ class GirassolConectaApp extends StatelessWidget {
       home: const SplashPage(),
       routes: {
         '/login': (context) => const LoginPage(),
-        '/overview': (context) => const OverviewScreen(),
+
+
+        //|-----------------Usuario----------------|
+        '/usuario': (context) => const UsuarioHome(),
+         // '/overview': (context) => const OverviewScreen(),
+
+       ////|-----------------Profissional----------------| 
+        '/profissional': (context) => const ProfissionaisScreen(),
+
+        //|-----------------Admin----------------|
+        '/admin': (context) => const AdminHome(),
+        
         // daqui você pode ir adicionando as outras:
         // '/acolhimento': (context) => const AcolhimentoScreen(),
         // '/voluntarios': (context) => const VoluntariosScreen(),

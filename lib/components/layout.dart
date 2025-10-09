@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
-import 'drawer_menu.dart';
 
 class Layout extends StatelessWidget {
   final Widget content;
-  const Layout({super.key, required this.content});
+  final Widget? drawer; // Agora opcional
+
+  const Layout({
+    super.key,
+    required this.content,
+    this.drawer,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Girassol Conecta"),
+        automaticallyImplyLeading: true,
       ),
-      drawer: const DrawerMenu(),
+      drawer: drawer, // Nada de DrawerMenu fixo aqui
       body: content,
       bottomNavigationBar: Container(
         height: 40,
