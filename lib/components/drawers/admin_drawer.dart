@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../../theme/app_colors.dart';
+import 'package:gc_flutter_app/services/auth_service.dart';
+import 'package:gc_flutter_app/screens/login_page.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
@@ -17,8 +21,9 @@ class AdminDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
-          _item(context, Icons.dashboard, "Visão Geral", '/overview'),
+          _item(context, Icons.home, "Home", '/admin'),
           _item(context, Icons.favorite_border, "Acolhimento", '/acolhimento'),
+          _item(context, Icons.favorite_border, "Profissional", '/profissional'),
           ExpansionTile(
             leading: const Icon(Icons.medical_services),
             title: const Text("Profissionais"),
@@ -42,9 +47,14 @@ class AdminDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text("Sair"),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/login');
-            },
+            onTap: () async {
+             await AuthService.logout(); // <-- encerra sessão e limpa SharedPreferences
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginPage()),
+                (route) => false,
+              );
+           },
           ),
         ],
       ),

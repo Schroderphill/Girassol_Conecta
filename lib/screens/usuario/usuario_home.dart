@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/components/layout.dart';
-import '/drawers/usuario_drawer.dart';
+import '../../components/drawers/usuario_drawer.dart';
 
 class UsuarioHome extends StatelessWidget {
   const UsuarioHome({super.key});

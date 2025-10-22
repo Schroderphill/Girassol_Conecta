@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../../theme/app_colors.dart';
+import 'package:gc_flutter_app/services/auth_service.dart';
+import 'package:gc_flutter_app/screens/login_page.dart';
 
 class VoluntarioDrawer extends StatelessWidget {
   const VoluntarioDrawer({super.key});
@@ -26,9 +30,14 @@ class VoluntarioDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text("Sair"),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/login');
-            },
+           onTap: () async {
+             await AuthService.logout(); // <-- encerra sessão e limpa SharedPreferences
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginPage()),
+                (route) => false,
+              );
+           },
           ),
         ],
       ),

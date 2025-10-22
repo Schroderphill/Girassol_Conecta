@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/components/layout.dart';
-import '/drawers/voluntario_drawer.dart';
+import '../../components/drawers/voluntario_drawer.dart';
 
 class VoluntarioHome extends StatelessWidget {
   const VoluntarioHome({super.key});

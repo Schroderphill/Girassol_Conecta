@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_colors.dart';
@@ -29,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
       String role = prefs.getString('userRole') ?? 'usuario';
 
       switch (role) {
-        case "admin":
+        case "admin":          
           Navigator.pushReplacementNamed(context, '/admin');
           break;
         case "profissional":
