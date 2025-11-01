@@ -48,7 +48,7 @@ class ProfissionaisController {
     final updated = await ModalAction.showEditModal(context, profissional);
     if (updated == null) return;
 
-    final id = int.tryParse(profissional['id'].toString()) ?? 0;
+    final id = int.tryParse(profissional['idProfissional'].toString()) ?? 0;
     final (ok, msg) = await AdminService.editarProfissional(id, updated);
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -64,11 +64,11 @@ class ProfissionaisController {
   /// 🔴 EXCLUIR PROFISSIONAL
   static Future<void> _excluirProfissional(
       BuildContext context, Map<String, dynamic> profissional, VoidCallback onRefresh) async {
-    final nome = profissional['nome'] ?? 'este profissional';
+    final nome = profissional['Nome'] ?? 'este profissional';
     final confirm = await ModalAction.showDeleteConfirm(context, nome);
     if (!confirm) return;
 
-    final id = int.tryParse(profissional['id'].toString()) ?? 0;
+    final id = int.tryParse(profissional['idProfissional'].toString()) ?? 0;
     final (ok, msg) = await AdminService.excluirProfissional(id);
 
     ScaffoldMessenger.of(context).showSnackBar(

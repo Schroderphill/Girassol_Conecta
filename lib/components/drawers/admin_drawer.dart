@@ -23,8 +23,8 @@ class AdminDrawer extends StatelessWidget {
           ),
           _item(context, Icons.home, "Home", '/admin'),
           _item(context, Icons.favorite_border, "Acolhimento", '/acolhimento'),
-          _item(context, Icons.favorite_border, "Profissional", '/profissional'),
-          ExpansionTile(
+          _item(context, Icons.medical_services, "Profissional", '/profissional'),
+         /* ExpansionTile(
             leading: const Icon(Icons.medical_services),
             title: const Text("Profissionais"),
             children: [
@@ -32,7 +32,7 @@ class AdminDrawer extends StatelessWidget {
               _subItem(context, "Psicólogos", '/profissionais_psicologos'),
               _subItem(context, "Assistente Social", '/profissionais_assistentes'),
             ],
-          ),
+          ),*/
           _item(context, Icons.group_outlined, "Voluntários", '/voluntarios'),
           ExpansionTile(
             leading: const Icon(Icons.calendar_today_outlined),

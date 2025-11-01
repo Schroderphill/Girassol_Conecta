@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import '/widgets/dropdown_table.dart';
 import '/components/modais/profissionais_controller.dart';
@@ -221,37 +223,47 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
                                 ),
                     ),
 
-                    /// 📄 Navegação
-                    if (listaFiltrada.length > _itensPorPagina)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: _paginaAtual > 0
-                                  ? () => setState(() => _paginaAtual--)
-                                  : null,
-                              icon: const Icon(Icons.chevron_left),
-                              label: const Text('Anterior'),
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              'Página ${_paginaAtual + 1} de $totalPaginas',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(width: 16),
-                            ElevatedButton.icon(
-                              onPressed: (_paginaAtual + 1) < totalPaginas
-                                  ? () => setState(() => _paginaAtual++)
-                                  : null,
-                              icon: const Icon(Icons.chevron_right),
-                              label: const Text('Próxima'),
-                            ),
-                          ],
-                        ),
+                   
+                    /// 📄 Navegação (centralizada e espaçada)
+                  if (listaFiltrada.length > _itensPorPagina)
+                    Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(8),
                       ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: _paginaAtual > 0
+                                ? () => setState(() => _paginaAtual--)
+                                : null,
+                            icon: const Icon(Icons.chevron_left),
+                            tooltip: 'Anterior',
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'Página ${_paginaAtual + 1} de $totalPaginas',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          IconButton(
+                            onPressed: (_paginaAtual + 1) < totalPaginas
+                                ? () => setState(() => _paginaAtual++)
+                                : null,
+                            icon: const Icon(Icons.chevron_right),
+                            tooltip: 'Próxima',
+                          ),
+                        ],
+                      ),
+                    ),
+
                   ],
                 ),
               ),
