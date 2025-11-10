@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+//import 'package:gc_flutter_app/widgets/user_adm_modal.dart';
 import '/screens/admin/admin_acolhimento.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_page.dart';
 import 'screens/login_page.dart';
-//import 'screens/overview_screen.dart'; 
+import 'screens/admin/admin_usuario.dart'; 
 import 'screens/admin/admin_home.dart';
 import 'screens/usuario/usuario_home.dart';
 import 'screens/admin/admin_profissionais.dart';
+import 'screens/admin/admin_perfil.dart';
 
 void main() {
   runApp(const GirassolConectaApp());
@@ -39,7 +41,9 @@ class GirassolConectaApp extends StatelessWidget {
         '/admin': (context) => const AdminHome(),
         '/acolhimento': (context) => const AdminAcolhimento(),
         '/profissional': (context) => const AdminProfissionaisScreen(),
-        
+        '/usuarios_gestao': (context) => const AdminUsuariosScreen(),
+        '/editar_perfil': (context) => const AdminPerfil(),
+
         // daqui você pode ir adicionando as outras:
         // '/acolhimento': (context) => const AcolhimentoScreen(),
         // '/voluntarios': (context) => const VoluntariosScreen(),

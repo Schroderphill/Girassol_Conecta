@@ -24,16 +24,17 @@ class AdminDrawer extends StatelessWidget {
           _item(context, Icons.home, "Home", '/admin'),
           _item(context, Icons.favorite_border, "Acolhimento", '/acolhimento'),
           _item(context, Icons.medical_services, "Profissional", '/profissional'),
-         /* ExpansionTile(
-            leading: const Icon(Icons.medical_services),
-            title: const Text("Profissionais"),
+          _item(context, Icons.group_outlined, "Usuarios", '/usuarios_gestao'),
+          //_item(context, Icons.group_outlined, "Voluntários", '/voluntarios_gestao'),
+          ExpansionTile(
+            leading: const Icon(Icons.feed_outlined),
+            title: const Text("Atividades"),
             children: [
-              _subItem(context, "Médicos", '/profissionais_medicos'),
-              _subItem(context, "Psicólogos", '/profissionais_psicologos'),
-              _subItem(context, "Assistente Social", '/profissionais_assistentes'),
+              _subItem(context, "Feed", '/feed'),
+              _subItem(context, "Atividades", '/atividade_gestao'),              
             ],
-          ),*/
-          _item(context, Icons.group_outlined, "Voluntários", '/voluntarios'),
+          ),
+          //_item(context, Icons.group_outlined, "Voluntários", '/voluntarios'),
           ExpansionTile(
             leading: const Icon(Icons.calendar_today_outlined),
             title: const Text("Agenda"),
@@ -43,6 +44,7 @@ class AdminDrawer extends StatelessWidget {
               _subItem(context, "Psicólogo", '/agenda_psicologo'),
             ],
           ),
+           _item(context, Icons.group_outlined, "Perfil", '/editar_perfil'),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),

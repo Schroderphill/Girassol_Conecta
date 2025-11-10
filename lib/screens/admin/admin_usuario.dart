@@ -2,68 +2,67 @@
 
 import 'package:flutter/material.dart';
 import '/widgets/dropdown_table.dart';
-import '/components/modais/profissionais_controller.dart';
 import '/services/admin_service.dart';
+import '/components/modais/usuarios_controller.dart';
 import '/components/drawers/admin_drawer.dart';
 
-class AdminProfissionaisScreen extends StatefulWidget {
-  const AdminProfissionaisScreen({super.key});
+class AdminUsuariosScreen extends StatefulWidget {
+  const AdminUsuariosScreen({super.key});
 
   @override
-  State<AdminProfissionaisScreen> createState() =>
-      _AdminProfissionaisScreenState();
+  State<AdminUsuariosScreen> createState() => _AdminUsuariosScreenState();
 }
 
-class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
+class _AdminUsuariosScreenState extends State<AdminUsuariosScreen> {
   String _tipoSelecionado = '';
   String _pesquisa = '';
   int _paginaAtual = 0;
   final int _itensPorPagina = 5;
 
-  List<Map<String, dynamic>> _profissionais = [];
+  List<Map<String, dynamic>> _usuarios = [];
   bool _carregando = false;
 
   @override
   void initState() {
     super.initState();
-    _carregarProfissionais();
+    _carregarUsuarios();
   }
 
-  Future<void> _carregarProfissionais() async {
+  Future<void> _carregarUsuarios() async {
     setState(() => _carregando = true);
     try {
-      final lista =
-          await AdminService.listarProfissionais(tipo: _tipoSelecionado);
-      setState(() => _profissionais = lista);
+      final lista = await AdminService.listarUsuarios();
+      setState(() => _usuarios = lista);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao carregar profissionais.')),
+        const SnackBar(content: Text('Erro ao carregar usuários.')),
       );
     } finally {
       setState(() => _carregando = false);
     }
   }
 
-  String _normalizarTipo(String tipo) {
-    switch (tipo) {
-      case 'Médico':
-        return 'Medico';
-      case 'Psicólogo':
-        return 'Psicologo';
-      case 'Assistente Social':
-        return 'AssistenteSocial';
-      case 'Todos':
-        return '';
-      default:
-        return tipo;
+  /// 🔽 Função que aplica o filtro (Usuário / Voluntário)
+  List<Map<String, dynamic>> _aplicarFiltroTipo() {
+    if (_tipoSelecionado.isEmpty || _tipoSelecionado == 'Todos') {
+      return _usuarios;
     }
+
+    return _usuarios.where((u) {
+      final useridVoluntario = u['UseridVoluntario'];
+      final ehVoluntario = useridVoluntario != null && useridVoluntario.toString().isNotEmpty;
+      return _tipoSelecionado == 'Voluntário' ? ehVoluntario : !ehVoluntario;
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    /// 🧭 Aplica filtro de tipo
+    final filtrados = _aplicarFiltroTipo();
+
     /// 🔍 Filtra localmente por nome
-    final listaFiltrada = _profissionais.where((p) {
-      final nome = (p['Nome'] ?? '').toString().toLowerCase();
+    final listaFiltrada = filtrados.where((u) {
+      final nome = (u['NomeUsuario'] ?? '').toString().toLowerCase();
       return nome.contains(_pesquisa.toLowerCase());
     }).toList();
 
@@ -80,16 +79,16 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
     return Scaffold(
       drawer: const AdminDrawer(),
       appBar: AppBar(
-        title: const Text('Gestão de Profissionais'),
+        title: const Text('Gestão de Usuários'),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add_alt_1),
-            tooltip: 'Adicionar novo profissional',
-            onPressed: () => ProfissionaisController.handleAction(
+            tooltip: 'Adicionar novo usuário',
+            onPressed: () => UsuariosController.handleAction(
               context,
               action: 'adicionar',
-              profissional: const {},
-              onRefresh: _carregarProfissionais,
+              usuario: const {},
+              onRefresh: _carregarUsuarios,
             ),
           ),
         ],
@@ -101,7 +100,7 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
             /// 🔍 Campo de pesquisa isolado
             TextField(
               decoration: const InputDecoration(
-                labelText: 'Pesquisar profissional...',
+                labelText: 'Pesquisar usuário...',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
@@ -125,17 +124,15 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
                 ),
                 child: Column(
                   children: [
-                    /// 🔽 Dropdown filtro
+                    /// 🔽 Dropdown filtro (Usuário / Voluntário)
                     DropdownTable(
-                      title: 'Tipo Profissional:',
-                      options: const ['Todos', 'Médico', 'Psicólogo', 'Assistente Social'],
+                      title: 'Tipo:',
+                      options: const ['Todos', 'Usuário', 'Voluntário'],
                       onSelected: (tipo) {
-                        final tipoFormatado = _normalizarTipo(tipo);
                         setState(() {
-                          _tipoSelecionado = tipoFormatado;
+                          _tipoSelecionado = tipo;
                           _paginaAtual = 0;
                         });
-                        _carregarProfissionais();
                       },
                     ),
                     const SizedBox(height: 16),
@@ -146,25 +143,29 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
                           ? const Center(child: CircularProgressIndicator())
                           : listaFiltrada.isEmpty
                               ? const Center(
-                                  child: Text('Nenhum profissional encontrado.'),
+                                  child: Text('Nenhum usuário encontrado.'),
                                 )
                               : RefreshIndicator(
-                                  onRefresh: _carregarProfissionais,
+                                  onRefresh: _carregarUsuarios,
                                   child: ListView.builder(
                                     itemCount: pagina.length,
                                     itemBuilder: (context, index) {
-                                      final p = pagina[index];
-                                      final nome = p['Nome'] ?? 'Sem nome';
-                                      final registro = p['Registro'] ?? '';
+                                      final u = pagina[index];
+                                      final nome = u['NomeSocial'] ?? 'Sem nome';
+                                      final cpf = u['CPF'] ?? '—';
+                                      final useridVoluntario = u['UseridVoluntario'];
+                                      final tipo = (useridVoluntario != null &&
+                                              useridVoluntario.toString().isNotEmpty)
+                                          ? 'Voluntário'
+                                          : 'Usuário';
 
                                       return Card(
                                         margin: const EdgeInsets.symmetric(vertical: 6),
                                         elevation: 2,
                                         child: ListTile(
                                           leading: CircleAvatar(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                            backgroundColor:
+                                                Theme.of(context).colorScheme.primary,
                                             child: Text(
                                               nome.isNotEmpty
                                                   ? nome[0].toUpperCase()
@@ -173,8 +174,7 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
                                             ),
                                           ),
                                           title: Text(nome),
-                                          subtitle: Text(
-                                              'Registro: $registro\nTipo: $_tipoSelecionado'),
+                                          subtitle: Text('CPF: $cpf\nTipo: $tipo'),
                                           isThreeLine: true,
                                           trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -183,33 +183,33 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
                                                 icon: const Icon(Icons.visibility),
                                                 tooltip: 'Ver detalhes',
                                                 onPressed: () =>
-                                                    ProfissionaisController.handleAction(
+                                                    UsuariosController.handleAction(
                                                   context,
                                                   action: 'ver',
-                                                  profissional: p,
-                                                  onRefresh: _carregarProfissionais,
+                                                  usuario: u,
+                                                  onRefresh: _carregarUsuarios,
                                                 ),
                                               ),
                                               IconButton(
                                                 icon: const Icon(Icons.edit),
                                                 tooltip: 'Editar',
                                                 onPressed: () =>
-                                                    ProfissionaisController.handleAction(
+                                                    UsuariosController.handleAction(
                                                   context,
                                                   action: 'editar',
-                                                  profissional: p,
-                                                  onRefresh: _carregarProfissionais,
+                                                  usuario: u,
+                                                  onRefresh: _carregarUsuarios,
                                                 ),
                                               ),
                                               IconButton(
                                                 icon: const Icon(Icons.delete),
                                                 tooltip: 'Excluir',
                                                 onPressed: () =>
-                                                    ProfissionaisController.handleAction(
+                                                    UsuariosController.handleAction(
                                                   context,
                                                   action: 'excluir',
-                                                  profissional: p,
-                                                  onRefresh: _carregarProfissionais,
+                                                  usuario: u,
+                                                  onRefresh: _carregarUsuarios,
                                                 ),
                                               ),
                                             ],
@@ -221,47 +221,45 @@ class _AdminProfissionaisScreenState extends State<AdminProfissionaisScreen> {
                                 ),
                     ),
 
-                   
                     /// 📄 Navegação (centralizada e espaçada)
-                  if (listaFiltrada.length > _itensPorPagina)
-                    Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.only(top: 20),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: _paginaAtual > 0
-                                ? () => setState(() => _paginaAtual--)
-                                : null,
-                            icon: const Icon(Icons.chevron_left),
-                            tooltip: 'Anterior',
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Página ${_paginaAtual + 1} de $totalPaginas',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                    if (listaFiltrada.length > _itensPorPagina)
+                      Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: _paginaAtual > 0
+                                  ? () => setState(() => _paginaAtual--)
+                                  : null,
+                              icon: const Icon(Icons.chevron_left),
+                              tooltip: 'Anterior',
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          IconButton(
-                            onPressed: (_paginaAtual + 1) < totalPaginas
-                                ? () => setState(() => _paginaAtual++)
-                                : null,
-                            icon: const Icon(Icons.chevron_right),
-                            tooltip: 'Próxima',
-                          ),
-                        ],
+                            const SizedBox(width: 12),
+                            Text(
+                              'Página ${_paginaAtual + 1} de $totalPaginas',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            IconButton(
+                              onPressed: (_paginaAtual + 1) < totalPaginas
+                                  ? () => setState(() => _paginaAtual++)
+                                  : null,
+                              icon: const Icon(Icons.chevron_right),
+                              tooltip: 'Próxima',
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-
                   ],
                 ),
               ),

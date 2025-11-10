@@ -24,8 +24,21 @@ class AuthService {
 
       if (data["success"] == true) {
         final prefs = await SharedPreferences.getInstance();
+        final user = data["user"];
         await prefs.setString("userEmail", data["user"]["email"]);
         await prefs.setString("role", data["role"] ?? "usuario");
+
+         // 🔹 Salva o ID retornado pelo backend (user["id"])
+      if (user["id"] != null) {
+        await prefs.setInt("userId", user["id"]);
+      }
+
+      // 🔹 Opcional: salvar nome para exibir no Drawer ou Header
+      if (user["nome"] != null) {
+        await prefs.setString("userNome", user["nome"]);
+      }
+
+      _logger.i("Sessão salva: ID=${user["id"]}, Role=${data["role"]}");
       }
 
       return data; // <-- retorna o Map completo
@@ -89,5 +102,15 @@ class AuthService {
   static Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey("userEmail");
+  }
+
+    // Retorna userId como String (ou null)
+  static Future<String?> getUserId() async {  
+    final prefs = await SharedPreferences.getInstance();
+    // tenta ler como inteiro (se foi salvo com setInt)
+    final int? idInt = prefs.getInt("userId");
+    if (idInt != null) return idInt.toString();
+    // fallback para string (se foi salvo com setString)
+    return prefs.getString("userId");
   }
 }

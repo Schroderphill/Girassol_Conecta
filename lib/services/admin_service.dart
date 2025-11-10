@@ -6,51 +6,117 @@ class AdminService {
   static final Logger _logger = Logger();
   static const String baseUrl = "http://10.0.2.2/gc_api/controllers/admin_crud.php";
 
-  /// LISTAR TODOS OS USUÁRIOS
-  static Future<List<Map<String, dynamic>>> listarUsuarios() async {
-    try {
-      final response = await http.get(
-        Uri.parse("$baseUrl?action=listar"),
-      );
+  // ==========================================================
+// ✅ CRUD PARA TABELA USUÁRIO (ADMIN)
+// ==========================================================
 
-      final data = json.decode(response.body);
+static Future<List<Map<String, dynamic>>> listarUsuarios() async {
+  try {
+    //final baseUrl = await ApiConfig.getBaseUrl();
+    final url = Uri.parse("$baseUrl?action=listar_usuario");
 
-      if (data["success"] == true && data["data"] is List) {
-        return List<Map<String, dynamic>>.from(data["data"]);
-      } else {
-        _logger.e("Erro ao listar usuários: ${data['message']}");
-        return [];
-      }
-    } catch (e) {
-      _logger.e("Erro na requisição listarUsuarios(): $e");
+    final response = await http.get(url);
+    final Map<String, dynamic> jsonData = json.decode(response.body);
+
+    if (jsonData["success"] == true && jsonData["data"] is List) {
+      return List<Map<String, dynamic>>.from(jsonData["data"]);
+    } else {
+      final msg = jsonData["message"] ?? "Erro desconhecido ao listar usuários.";
+      _logger.e("Erro ao listar usuários: $msg");
       return [];
     }
+  } catch (e) {
+    _logger.e("Falha na requisição listarUsuarios: $e");
+    return [];
   }
+}
 
-  /// EXCLUIR USUÁRIO
-  static Future<bool> excluirUsuario(int idUsuario) async {
-    try {
-      final response = await http.post(
-        Uri.parse(baseUrl),
-        body: {
-          "action": "excluir",
-          "id": idUsuario.toString(),
-        },
-      );
+// ==========================================================
+// 🟢 CADASTRAR NOVO USUÁRIO
+// ==========================================================
+static Future<(bool, String)> cadastrarUsuario(Map<String, dynamic> usuario) async {
+  try {
+    final url = Uri.parse("$baseUrl?action=cadastrar_usuario");
 
-      final data = json.decode(response.body);
+    final response = await http.post(url, body: usuario);
+    final Map<String, dynamic> jsonData = json.decode(response.body);
 
-      if (data["success"] == true) {
-        return true;
-      } else {
-        _logger.e("Erro ao excluir usuário: ${data['message']}");
-        return false;
-      }
-    } catch (e) {
-      _logger.e("Erro na requisição excluirUsuario(): $e");
-      return false;
+    final bool ok = jsonData["success"] == true;
+    final String msg = (jsonData["message"] as String?) ??
+        (ok ? "Usuário adicionado com sucesso." : "Falha ao adicionar usuário.");
+
+    return (ok, msg);
+  } catch (e) {
+    _logger.e("Erro ao adicionar usuário: $e");
+    return (false, "Erro na requisição: $e");
+  }
+}
+
+// ==========================================================
+// 🟡 EDITAR USUÁRIO EXISTENTE
+// ==========================================================
+static Future<(bool, String)> editarUsuario(int idUsuario, Map<String, dynamic> usuario) async {
+  try {
+    final url = Uri.parse("$baseUrl?action=editar_usuario&idUsuario=$idUsuario");
+
+    final response = await http.post(url, body: usuario);
+    final Map<String, dynamic> jsonData = json.decode(response.body);
+
+    final bool ok = jsonData["success"] == true;
+    final String msg = (jsonData["message"] as String?) ??
+        (ok ? "Usuário atualizado com sucesso." : "Falha ao editar usuário.");
+
+    return (ok, msg);
+  } catch (e) {
+    _logger.e("Erro ao editar usuário: $e");
+    return (false, "Erro na requisição: $e");
+  }
+}
+
+// ==========================================================
+// 🔴 EXCLUIR USUÁRIO
+// ==========================================================
+static Future<(bool, String)> excluirUsuario(int idUsuario) async {
+  try {
+    final url = Uri.parse("$baseUrl?action=excluir_usuario&idUsuario=$idUsuario");
+
+    final response = await http.get(url);
+    final Map<String, dynamic> jsonData = json.decode(response.body);
+
+    final bool ok = jsonData["success"] == true;
+    final String msg = (jsonData["message"] as String?) ??
+        (ok ? "Usuário excluído com sucesso." : "Falha ao excluir usuário.");
+
+    return (ok, msg);
+  } catch (e) {
+    _logger.e("Erro ao excluir usuário: $e");
+    return (false, "Erro na requisição: $e");
+  }
+}
+
+// ==========================================================
+// VISUALIZAR / BUSCAR USUÁRIO ESPECÍFICO
+// ==========================================================
+static Future<Map<String, dynamic>?> verUsuario(int idUsuario) async {
+  try {
+    //final baseUrl = await ApiConfig.getBaseUrl();
+    final url = Uri.parse("$baseUrl?action=buscar_usuario&idUsuario=$idUsuario");
+
+    final response = await http.get(url);
+    final Map<String, dynamic> jsonData = json.decode(response.body);
+
+    if (jsonData["success"] == true && jsonData["usuario"] != null) {
+      return Map<String, dynamic>.from(jsonData["usuario"]);
+    } else {
+      final msg = jsonData["message"] ?? "Usuário não encontrado.";
+      _logger.w("Aviso ao buscar usuário: $msg");
+      return null;
     }
+  } catch (e) {
+    _logger.e("Erro ao buscar usuário: $e");
+    return null;
   }
+}
 
 //-------------------------------------------------------------------------------
 //-------------------------------PROFISSIONAIS -------------------------------
@@ -79,6 +145,41 @@ class AdminService {
       return [];
     }
   }
+
+      /// ✅ 3. BUSCAR PROFISSIONAL POR ID (usado no perfil)
+    static Future<Map<String, dynamic>?> getProfissionalById({required String id}) async {
+      try {
+        final url = Uri.parse("$baseUrl/?action=listar_profissional&id=$id");
+        _logger.i("Buscando profissional por ID: $id | URL: $url");
+
+        final response = await http.get(url);
+
+        if (response.statusCode != 200) {
+          _logger.w("Erro HTTP: ${response.statusCode}");
+          return null;
+        }
+
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+
+        // Verifica sucesso e conteúdo
+        if (jsonData["success"] == true && jsonData["data"] != null) {
+          final data = jsonData["data"];
+
+          if (data is List && data.isNotEmpty) {
+            return Map<String, dynamic>.from(data.first);
+          } else if (data is Map<String, dynamic>) {
+            return Map<String, dynamic>.from(data);
+          }
+        }
+
+        _logger.w("Nenhum dado encontrado para o ID: $id");
+        return null;
+      } catch (e, stack) {
+        _logger.e("Erro ao buscar profissional por ID: $e", stackTrace: stack);
+        return null;
+      }
+    }
+
 
   /// ✅ 2. CADASTRAR PROFISSIONAL
   static Future<(bool, String)> cadastrarProfissional(Map<String, dynamic> dados) async {
