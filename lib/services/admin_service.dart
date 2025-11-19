@@ -7,7 +7,7 @@ class AdminService {
   static const String baseUrl = "http://10.0.2.2/gc_api/controllers/admin_crud.php";
 
   // ==========================================================
-// ✅ CRUD PARA TABELA USUÁRIO (ADMIN)
+// CRUD PARA TABELA USUÁRIO (ADMIN)
 // ==========================================================
 
 static Future<List<Map<String, dynamic>>> listarUsuarios() async {
@@ -32,7 +32,7 @@ static Future<List<Map<String, dynamic>>> listarUsuarios() async {
 }
 
 // ==========================================================
-// 🟢 CADASTRAR NOVO USUÁRIO
+// CADASTRAR NOVO USUÁRIO
 // ==========================================================
 static Future<(bool, String)> cadastrarUsuario(Map<String, dynamic> usuario) async {
   try {
@@ -53,7 +53,7 @@ static Future<(bool, String)> cadastrarUsuario(Map<String, dynamic> usuario) asy
 }
 
 // ==========================================================
-// 🟡 EDITAR USUÁRIO EXISTENTE
+// EDITAR USUÁRIO EXISTENTE
 // ==========================================================
 static Future<(bool, String)> editarUsuario(int idUsuario, Map<String, dynamic> usuario) async {
   try {
@@ -74,7 +74,7 @@ static Future<(bool, String)> editarUsuario(int idUsuario, Map<String, dynamic> 
 }
 
 // ==========================================================
-// 🔴 EXCLUIR USUÁRIO
+// EXCLUIR USUÁRIO
 // ==========================================================
 static Future<(bool, String)> excluirUsuario(int idUsuario) async {
   try {
@@ -122,7 +122,7 @@ static Future<Map<String, dynamic>?> verUsuario(int idUsuario) async {
 //-------------------------------PROFISSIONAIS -------------------------------
 //-------------------------------------------------------------------------------
 
-  /// ✅ 1. LISTAR PROFISSIONAIS
+  /// 1. LISTAR PROFISSIONAIS
   static Future<List<Map<String, dynamic>>> listarProfissionais({String? tipo}) async {
     try {
        final url = tipo == null || tipo.isEmpty
@@ -146,7 +146,7 @@ static Future<Map<String, dynamic>?> verUsuario(int idUsuario) async {
     }
   }
 
-      /// ✅ 3. BUSCAR PROFISSIONAL POR ID (usado no perfil)
+      /// 3. BUSCAR PROFISSIONAL POR ID (usado no perfil)
     static Future<Map<String, dynamic>?> getProfissionalById({required String id}) async {
       try {
         final url = Uri.parse("$baseUrl/?action=listar_profissional&id=$id");
@@ -181,7 +181,7 @@ static Future<Map<String, dynamic>?> verUsuario(int idUsuario) async {
     }
 
 
-  /// ✅ 2. CADASTRAR PROFISSIONAL
+  /// 2. CADASTRAR PROFISSIONAL
   static Future<(bool, String)> cadastrarProfissional(Map<String, dynamic> dados) async {
     try {
       // Converte valores nulos para string vazia

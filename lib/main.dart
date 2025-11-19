@@ -9,6 +9,7 @@ import 'screens/admin/admin_home.dart';
 import 'screens/usuario/usuario_home.dart';
 import 'screens/admin/admin_profissionais.dart';
 import 'screens/admin/admin_perfil.dart';
+import 'screens/admin/admin_agenda.dart';
 
 void main() {
   runApp(const GirassolConectaApp());
@@ -43,6 +44,7 @@ class GirassolConectaApp extends StatelessWidget {
         '/profissional': (context) => const AdminProfissionaisScreen(),
         '/usuarios_gestao': (context) => const AdminUsuariosScreen(),
         '/editar_perfil': (context) => const AdminPerfil(),
+        '/admin_agenda': (context) => const AdminAgendasScreen(),
 
         // daqui você pode ir adicionando as outras:
         // '/acolhimento': (context) => const AcolhimentoScreen(),
