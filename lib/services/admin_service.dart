@@ -55,21 +55,31 @@ static Future<(bool, String)> cadastrarUsuario(Map<String, dynamic> usuario) asy
 // ==========================================================
 // EDITAR USUÁRIO EXISTENTE
 // ==========================================================
-static Future<(bool, String)> editarUsuario(int idUsuario, Map<String, dynamic> usuario) async {
+static Future<(bool, String)> editarUsuario(int id, Map<String, dynamic> dados) async {
   try {
-    final url = Uri.parse("$baseUrl?action=editar_usuario&idUsuario=$idUsuario");
+    //  Monta o corpo da requisição com tudo convertido para String
+    final Map<String, String> body = {
+      "idUsuario": id.toString(),
+      ...dados.map((key, value) {
+        if (value == null) return MapEntry(key, '');
+        return MapEntry(key, value.toString());
+      }),
+    };
 
-    final response = await http.post(url, body: usuario);
+    final response = await http.post(
+      Uri.parse("$baseUrl?action=editar_usuario"),
+      body: body,
+    );
+
     final Map<String, dynamic> jsonData = json.decode(response.body);
+    final bool success = jsonData["success"] == true;
+    final String message = (jsonData["message"] as String?) ??
+        (success ? "Profissional atualizado com sucesso!" : "Erro ao editar profissional.");
 
-    final bool ok = jsonData["success"] == true;
-    final String msg = (jsonData["message"] as String?) ??
-        (ok ? "Usuário atualizado com sucesso." : "Falha ao editar usuário.");
-
-    return (ok, msg);
+    return (success, message);
   } catch (e) {
-    _logger.e("Erro ao editar usuário: $e");
-    return (false, "Erro na requisição: $e");
+    _logger.e("Erro ao editar profissional: $e");
+    return (false, "Falha na conexão com o servidor.");
   }
 }
 
@@ -97,26 +107,39 @@ static Future<(bool, String)> excluirUsuario(int idUsuario) async {
 // ==========================================================
 // VISUALIZAR / BUSCAR USUÁRIO ESPECÍFICO
 // ==========================================================
-static Future<Map<String, dynamic>?> verUsuario(int idUsuario) async {
-  try {
-    //final baseUrl = await ApiConfig.getBaseUrl();
-    final url = Uri.parse("$baseUrl?action=buscar_usuario&idUsuario=$idUsuario");
+static Future<Map<String, dynamic>?> verUsuario({required String id}) async {
+      try {
+        final url = Uri.parse("$baseUrl/?action=listar_usuario&id=$id");
+        _logger.i("Buscando usuário por ID: $id | URL: $url");
 
-    final response = await http.get(url);
-    final Map<String, dynamic> jsonData = json.decode(response.body);
+        final response = await http.get(url);
 
-    if (jsonData["success"] == true && jsonData["usuario"] != null) {
-      return Map<String, dynamic>.from(jsonData["usuario"]);
-    } else {
-      final msg = jsonData["message"] ?? "Usuário não encontrado.";
-      _logger.w("Aviso ao buscar usuário: $msg");
-      return null;
+        if (response.statusCode != 200) {
+          _logger.w("Erro HTTP: ${response.statusCode}");
+          return null;
+        }
+
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+
+        // Verifica sucesso e conteúdo
+        if (jsonData["success"] == true && jsonData["data"] != null) {
+          final data = jsonData["data"];
+
+          if (data is List && data.isNotEmpty) {
+            return Map<String, dynamic>.from(data.first);
+          } else if (data is Map<String, dynamic>) {
+            return Map<String, dynamic>.from(data);
+          }
+        }
+
+        _logger.w("Nenhum dado encontrado para o ID: $id");
+        return null;
+      } catch (e, stack) {
+        _logger.e("Erro ao buscar profissional por ID: $e", stackTrace: stack);
+        return null;
+      }
     }
-  } catch (e) {
-    _logger.e("Erro ao buscar usuário: $e");
-    return null;
-  }
-}
+
 
 //-------------------------------------------------------------------------------
 //-------------------------------PROFISSIONAIS -------------------------------

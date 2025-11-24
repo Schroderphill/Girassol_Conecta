@@ -2,18 +2,18 @@
 
 import 'package:flutter/material.dart';
 import '/components/layout.dart';
-import '/components/drawers/admin_drawer.dart';
+import '/components/drawers/usuario_drawer.dart';
 import '/widgets/feed_base.dart'; 
 import '/services/admin_service.dart';
 
-class AdminAtividades extends StatefulWidget {
-  const AdminAtividades({super.key});
+class UsuarioAtividades extends StatefulWidget {
+  const UsuarioAtividades({super.key});
 
   @override
-  State<AdminAtividades> createState() => _AdminAtividadesState();
+  State<UsuarioAtividades> createState() => _UsuarioAtividadesState();
 }
 
-class _AdminAtividadesState extends State<AdminAtividades> {
+class _UsuarioAtividadesState extends State<UsuarioAtividades> {
   List<Map<String, dynamic>> _atividades = [];
   String _pesquisa = '';
   int _paginaAtual = 0;
@@ -92,7 +92,7 @@ class _AdminAtividadesState extends State<AdminAtividades> {
         (listaFiltrada.length / _itensPorPagina).ceil().clamp(1, double.infinity).toInt();
 
     return Layout(
-      drawer: const AdminDrawer(),
+      drawer: const UsuarioDrawer(),
       content: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

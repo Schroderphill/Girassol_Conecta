@@ -21,10 +21,13 @@ class UsuarioDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
-          _item(context, Icons.event_available, "Eventos", '/usuario_eventos'),
-          _item(context, Icons.calendar_today, "Minha Agenda", '/usuario_agenda'),
+          _item(context, Icons.home, "Feed Atividades", '/usuario'),
+          _item(context, Icons.feed_outlined, "Inscrições", '/usuario_inscricoes'),
+          
           _item(context, Icons.healing, "Solicitar Atendimento", '/usuario_atendimento'),
-          _item(context, Icons.history, "Histórico de Consultas", '/usuario_historico'),
+          _item(context, Icons.calendar_today, "Minha Agenda", '/usuario_agenda'),
+           _item(context, Icons.group_outlined, "Perfil", '/usuario_perfil'),
+          //_item(context, Icons.history, "Histórico de Consultas", '/usuario_historico'),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
@@ -50,4 +53,6 @@ class UsuarioDrawer extends StatelessWidget {
       onTap: () => Navigator.pushReplacementNamed(context, route),
     );
   }
+
+  
 }

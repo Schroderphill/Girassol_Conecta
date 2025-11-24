@@ -232,12 +232,14 @@ class AgendaAdmModals {
           ),
           actions: [
             TextButton(
-              child: const Text("Cancelar"),
+              
               onPressed: () => Navigator.pop(context),
+              child: const Text("Cancelar"),
             ),
             ElevatedButton(
-              child: const Text("Salvar"),
+              
               onPressed: onSave,
+              child: const Text("Salvar"),
             ),
           ],
         );
@@ -267,12 +269,14 @@ class AgendaAdmModals {
           ),
           actions: [
             TextButton(
-              child: const Text("Não"),
+              
               onPressed: () => Navigator.pop(context),
+              child: const Text("Não"),
             ),
             ElevatedButton(
-              child: const Text("Sim, cancelar"),
+              
               onPressed: onConfirm,
+              child: const Text("Sim, cancelar"),
             ),
           ],
         );

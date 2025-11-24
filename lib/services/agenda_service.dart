@@ -8,12 +8,27 @@ class AgendaService {
       "http://10.0.2.2/gc_api/controllers/agenda_crud.php";
 
   /// 🔹 Buscar todas as agendas simples (CRUD read)
-  Future<List<dynamic>> fetchAgendas() async {
+    Future<List<dynamic>> fetchAgendas({Map<String, dynamic>? filtros}) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl?action=agenda_read'));
+      // 1. Constrói a URL base com a action
+      String url = '$baseUrl?action=agenda_read';
+
+      // 2. Adiciona filtros se existirem
+      if (filtros != null && filtros.isNotEmpty) {
+        // Itera sobre os filtros e adiciona cada par chave/valor à URL
+        filtros.forEach((key, value) {
+          // Encodifica a chave e o valor para uso seguro na URL
+          url += '&${Uri.encodeQueryComponent(key)}=${Uri.encodeQueryComponent(value.toString())}';
+        });
+      }
+
+      // 3. Realiza a requisição HTTP com a URL construída
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
+        
+        // ... o restante da sua lógica de tratamento de resposta permanece o mesmo
         if (decoded is Map && decoded['data'] != null) {
           final List<dynamic> agendas = decoded['data'];
           _logger.i('Fetched ${agendas.length} agendas successfully.');
@@ -23,7 +38,7 @@ class AgendaService {
         return [];
       } else {
         _logger.e(
-            'Failed to load agendas. Status code: ${response.statusCode}');
+          'Failed to load agendas. Status code: ${response.statusCode}');
         throw Exception('Failed to load agendas');
       }
     } catch (e) {

@@ -76,7 +76,7 @@ static Future<Map<String, dynamic>?> showEditModal(
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
-                  value: tipo,                 
+                  initialValue: tipo,                 
                   decoration: const InputDecoration(labelText: 'Tipo de profissional'),
                   items: const [
                     DropdownMenuItem(value: 'Medico', child: Text('Médico')),
@@ -210,7 +210,7 @@ static Future<Map<String, dynamic>?> showAddModal(BuildContext context) async {
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
-              value: tipo,              
+              initialValue: tipo,              
               decoration: const InputDecoration(labelText: 'Tipo de profissional'),
               items: const [
                 DropdownMenuItem(value: 'Medico', child: Text('Médico')),
