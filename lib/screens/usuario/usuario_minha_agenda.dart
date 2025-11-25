@@ -1,24 +1,19 @@
 //ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-// Importação necessária para SharedPreferences (usado internamente pelo AuthService)
-//import 'package:shared_preferences/shared_preferences.dart'; 
-
-// Importação do serviço de autenticação para buscar o ID da sessão
-import '/services/auth_service.dart'; 
+import '/services/auth_service.dart'; //importo pra pegar ID
 import '/services/agenda_service.dart';
-import '/components/drawers/admin_drawer.dart';
-import '/components/modais/agendas_controller.dart';
+import '/components/drawers/usuario_drawer.dart';
 
-class MinhaAgendaScreen extends StatefulWidget {
-  const MinhaAgendaScreen({super.key});
+class UsuarioAgendaScreen extends StatefulWidget {
+  const UsuarioAgendaScreen({super.key});
 
   @override
-  State<MinhaAgendaScreen> createState() => _MinhaAgendaScreenState();
+  State<UsuarioAgendaScreen> createState() => _UsuarioAgendaScreenState();
 }
 
-class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
-  final AgendasController _controller = AgendasController();
+class _UsuarioAgendaScreenState extends State<UsuarioAgendaScreen> {
+  // Removido: final AgendasController _controller = AgendasController();
   
   String? _currentUserId; 
   String _pesquisa = '';
@@ -62,12 +57,10 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
   
   /// 🔄 LOAD com filtro de ID (idSessao)
   Future<void> _carregarAgendasComFiltro(String idSessao) async {
-    // A flag _carregando já foi setada em _iniciarSessaoECarregarAgendas
-    
     try {
       final service = AgendaService();
       
-      // Passa o 'idSessao' para filtrar no backend (como definido no seu AgendaService)
+      // Passa o 'idSessao' para filtrar no backend
       final lista = await service.fetchAgendaView(
           idSessao: idSessao, 
       ); 
@@ -83,14 +76,12 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
           );
       }
     } 
-    // O finally foi movido para _iniciarSessaoECarregarAgendas para evitar duas chamadas
   }
 
   /// 🔵 FILTRO HOJE
   void _filtrarHoje() {
     if (_currentUserId == null) return;
     
-    // Recarrega todos os dados primeiro para aplicar o filtro na lista completa
     _carregarAgendasComFiltro(_currentUserId!);
 
     final hoje = DateTime.now();
@@ -106,7 +97,6 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
   void _filtrarSemana() {
     if (_currentUserId == null) return;
     
-    // Recarrega todos os dados primeiro para aplicar o filtro na lista completa
     _carregarAgendasComFiltro(_currentUserId!);
     
     final hoje = DateTime.now();
@@ -126,28 +116,8 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
     });
   }
 
-  /// 🔴 CANCELAR AGENDAMENTO
-  /*Future<void> _cancelarAgendamento(String idAtendimento) async {
-    await _controller.abrirCancelModal(context, idAtendimento);
-    if (_currentUserId != null) {
-        await _carregarAgendasComFiltro(_currentUserId!); 
-    }
-  }*/
-
-  /// 📋 REALIZAR CONSULTA (abre modal)
-  /// ✏️ REMARCAR (abre modal)
-  void _realizarConsulta(Map agenda) {
-    if (_currentUserId != null) {
-        _controller.abrirAtendeModal(context, agenda).then((_) => _carregarAgendasComFiltro(_currentUserId!));
-    }
-  }
-
-  /// ✏️ REMARCAR (abre modal)
-  void _remarcarAgendamento(Map agenda) {
-    if (_currentUserId != null) {
-        _controller.abrirEditModal(context, agenda).then((_) => _carregarAgendasComFiltro(_currentUserId!));
-    }
-  }
+  // Removido: _cancelarAgendamento
+  // Removido: _remarcarAgendamento
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +137,7 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
     final totalPaginas = (filtradas.length / _itensPorPagina).ceil();
 
     return Scaffold(
-      drawer: const AdminDrawer(), 
+      drawer: const UsuarioDrawer(), 
       appBar: AppBar(
         title: const Text('Minha Agenda'), 
         actions: [
@@ -275,25 +245,8 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
                                     return Card(
                                       child: ListTile(
                                         title: Text(titulo),
-                                        subtitle: Text('Tipo: ${ag['Especialidade'] ?? 'Não informado'}   \nData: $data às $hora\nStatus: $status'),
-                                        trailing: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            // Ações de edição e cancelamento mantidas
-                                            IconButton(
-                                              icon: const Icon(Icons.content_paste),
-                                              onPressed: () => _realizarConsulta(ag),
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(Icons.edit),
-                                              onPressed: () => _remarcarAgendamento(ag),
-                                            ),
-                                            /*IconButton(
-                                              icon: const Icon(Icons.cancel),
-                                              onPressed: () => _cancelarAgendamento(ag['idAtendimento'].toString()),
-                                            ),*/
-                                          ],
-                                        ),
+                                        subtitle: Text('Tipo: ${ag['Especialidade'] ?? 'Não informado'} | Data: $data às $hora\nStatus: $status'),
+                                        // AÇÕES REMOVIDAS: O trailing: Row foi excluído para remover os botões de Editar e Cancelar
                                       ),
                                     );
                                   },

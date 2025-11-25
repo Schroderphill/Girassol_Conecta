@@ -23,6 +23,8 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
 
   List<Map<String, dynamic>> _agendas = [];
   bool _carregando = false;
+  // Armazena a lista completa de agendas carregada da API para poder filtrar
+  List<Map<String, dynamic>> _agendasCompletas = []; // Alterado
 
   @override
   void initState() {
@@ -62,7 +64,9 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
       );
 
       setState(() {
-        _agendas = List<Map<String, dynamic>>.from(lista);
+        // Armazena a lista completa e a lista filtrada/paginada (inicialmente iguais)
+        _agendasCompletas = List<Map<String, dynamic>>.from(lista); // Alterado
+        _agendas = List<Map<String, dynamic>>.from(lista); // Alterado
         _paginaAtual = 0;
       });
     } catch (e) {
@@ -80,7 +84,7 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
     final hojeStr = "${hoje.year}-${hoje.month.toString().padLeft(2, '0')}-${hoje.day.toString().padLeft(2, '0')}";
 
     setState(() {
-      _agendas = _agendas.where((a) => (a['DataAtendimento'] == hojeStr)).toList();
+     _agendas = _agendasCompletas.where((a) => (a['DataAtendimento'] == hojeStr)).toList(); // Alterado
       _paginaAtual = 0;
     });
   }
@@ -99,7 +103,16 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
     }
 
     setState(() {
-      _agendas = _agendas.where((a) => inRange(a['DataAtendimento'] ?? '')).toList();
+      _agendas = _agendasCompletas.where((a) => inRange(a['DataAtendimento'] ?? '')).toList(); // Alterado
+      _paginaAtual = 0;
+    });
+  }
+
+  // 🟡 NOVO: FILTRO SOLICITAÇÕES (Status = Solicitado)
+  void _filtrarSolicitacoes() { // NOVO MÉTODO
+    setState(() {
+      // Filtra a partir da lista completa (limpa filtros anteriores)
+      _agendas = _agendasCompletas.where((a) => (a['Status'] == 'Solicitado')).toList();
       _paginaAtual = 0;
     });
   }
@@ -168,7 +181,7 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
 
             const SizedBox(height: 16),
 
-            // 🔵 BOTÕES HOJE / SEMANA
+            // 🔵 BOTÕES HOJE / SEMANA / SOLICITAÇÕES
             Row(
               children: [
                 Flexible(
@@ -186,7 +199,7 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
                 ),
                 const SizedBox(width: 10),
                 Flexible(
-                  flex: 4,
+                  flex: 1, // Alterado: Reduzido o flex para abrir espaço para o novo botão
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: SizedBox(
@@ -194,6 +207,21 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
                       child: ElevatedButton(
                         onPressed: _filtrarSemana,
                         child: const Text("Semana"),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10), // NOVO: Espaçamento para o botão Solicitacões
+                Flexible( // NOVO: Botão Solicitacões
+                  flex: 2, 
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        onPressed: _filtrarSolicitacoes, // Chamada para o novo filtro
+                        //icon: const Icon(Icons.pending_actions, size: 18),
+                        label: const Text("Solicitações"),
                       ),
                     ),
                   ),

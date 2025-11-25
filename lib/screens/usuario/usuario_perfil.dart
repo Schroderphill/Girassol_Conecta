@@ -94,7 +94,7 @@ class _UsuarioPerfilState extends State<UsuarioPerfil> {
 
     setState(() => isSaving = true);
 
-    // Mude para o método correto (ex.: editarUsuario ao invés de editarProfissional)
+    // Mude para o método correto do AdminServices)
     final (success, message) = await AdminService.editarUsuario(
       int.parse(userId!),
       updatedData,
@@ -141,10 +141,10 @@ class _UsuarioPerfilState extends State<UsuarioPerfil> {
                 {'label': 'Nome Social', 'controller': nomeSocialController},
                 {'label': 'CPF', 'controller': cpfController, 'mask': '000.000.000-00', 'type': TextInputType.number},
                 {'label': 'CNS (Cartão Nacional de Saúde)', 'controller': cnsController, 'type': TextInputType.number},
-                {'label': 'Data de Nascimento', 'controller': dataNascimentoController, 'mask': '00/00/0000', 'type': TextInputType.datetime, 'readOnly': true}, 
+                {'label': 'Data de Nascimento', 'controller': dataNascimentoController, 'mask': '00/00/0000', 'type': TextInputType.datetime}, 
                 {'label': 'Contato (Telefone/Celular)', 'controller': contatoController, 'mask': '(00) 00000-0000', 'type': TextInputType.phone},
                 {'label': 'E-mail', 'controller': emailController, 'type': TextInputType.emailAddress},
-                {'label': 'Senha (deixe em branco para não alterar)', 'controller': senhaController, 'obscure': true},
+                {'label': 'Senha (Em branco se não alterado)', 'controller': senhaController, 'obscure': true},
               ],
               onSave: isSaving ? null : _updateUserData,
             ),

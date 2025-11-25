@@ -12,6 +12,9 @@ class AgendasController {
   final TextEditingController dataCtrl = TextEditingController();
   final TextEditingController horaCtrl = TextEditingController();
 
+  //Controllers texto AnotaAtendimento
+  final TextEditingController anotaAtendimentoCtrl = TextEditingController();
+
   /// DROPDOWN SELECTED VALUES
   String? profissionalSelecionadoId;
   String? usuarioSelecionadoId;
@@ -150,11 +153,40 @@ class AgendasController {
           {
             "DataAtendimento": dataCtrl.text,
             "HoraAtendimento": horaCtrl.text,
+            "Status": "Agendado",
           },
         );
 
         Navigator.pop(context);
         alerta(context, "Agendamento atualizado!");
+      },
+    );
+  }
+
+
+  Future<void> abrirAtendeModal(BuildContext context, Map agenda) async {
+    anotaAtendimentoCtrl.text = agenda["AnotaAtendimento"] ?? '';
+    //horaCtrl.text = agenda["HoraAtendimento"] ?? '';
+
+    await AgendaAdmModals.showFinalizeModal(
+      context: context,
+      anotaAtendimentoCtrl: anotaAtendimentoCtrl,
+      //dataCtrl: dataCtrl,
+     // horaCtrl: horaCtrl,
+     // onSelectData: () => selecionarData(context),
+     // onSelectHora: () => selecionarHora(context),
+      onSave: () async {
+        await _service.updateAgenda(
+          agenda["idAtendimento"].toString(),
+          {
+            "AnotaAtendimento": anotaAtendimentoCtrl.text,
+            //"HoraAtendimento": horaCtrl.text,
+            "Status": "Finalizado",
+          },
+        );
+
+        Navigator.pop(context);
+        alerta(context, "Atendimento Finalizado!");
       },
     );
   }

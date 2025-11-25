@@ -22,20 +22,29 @@ class AdminDrawer extends StatelessWidget {
             ),
           ),
           _item(context, Icons.home, "Home", '/admin'),
-          _item(context, Icons.favorite_border, "Acolhimento", '/acolhimento'),
+          ExpansionTile(
+            leading: const Icon(Icons.favorite_border),
+            title: const Text("Acolhimento"),
+            children: [
+              _subItem(context, "Realiza Acolhimento", '/acolhimento'),
+              _subItem(context, "Edita Acolhimento", '/editar_acolhimento'),
+            ],
+          ),
+          //_item(context, Icons.favorite_border, "Acolhimento", '/acolhimento'),
+
           _item(context, Icons.medical_services, "Profissional", '/profissional'),
           _item(context, Icons.group_outlined, "Usuarios", '/usuarios_gestao'),
           //_item(context, Icons.calendar_today_outlined, "Agenda", '/admin_agenda'),
           
           //_item(context, Icons.group_outlined, "Voluntários", '/voluntarios'),
-          ExpansionTile(
+          /*ExpansionTile(
             leading: const Icon(Icons.support_agent_outlined),
             title: const Text("Atendimentos"),
             children: [
-              _subItem(context, "Solicitação", '/solicitacao_atendimento'),
+              _subItem(context, "Solicitações Atendimentos", '/solicitacao_atendimento'),
               _subItem(context, "Prontuarios", '/prontuarios'),
             ],
-          ),
+          ),*/
 
           ExpansionTile(
             leading: const Icon(Icons.calendar_today_outlined),

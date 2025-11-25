@@ -145,7 +145,7 @@ static Future<Map<String, dynamic>?> verUsuario({required String id}) async {
 //-------------------------------PROFISSIONAIS -------------------------------
 //-------------------------------------------------------------------------------
 
-  /// 1. LISTAR PROFISSIONAIS
+  /// LISTAR PROFISSIONAIS
   static Future<List<Map<String, dynamic>>> listarProfissionais({String? tipo}) async {
     try {
        final url = tipo == null || tipo.isEmpty
@@ -168,8 +168,9 @@ static Future<Map<String, dynamic>?> verUsuario({required String id}) async {
       return [];
     }
   }
-
-      /// 3. BUSCAR PROFISSIONAL POR ID (usado no perfil)
+//=======================================================================
+      ///  BUSCAR PROFISSIONAL POR ID (usado no perfil)
+/// ======================================================
     static Future<Map<String, dynamic>?> getProfissionalById({required String id}) async {
       try {
         final url = Uri.parse("$baseUrl/?action=listar_profissional&id=$id");
@@ -203,8 +204,9 @@ static Future<Map<String, dynamic>?> verUsuario({required String id}) async {
       }
     }
 
-
-  /// 2. CADASTRAR PROFISSIONAL
+//=======================================================================
+  /// CADASTRAR PROFISSIONAL
+//=======================================================================
   static Future<(bool, String)> cadastrarProfissional(Map<String, dynamic> dados) async {
     try {
       // Converte valores nulos para string vazia
@@ -231,7 +233,7 @@ static Future<Map<String, dynamic>?> verUsuario({required String id}) async {
 
 
 //=======================================================================
-//======================= EDITAR PROFISSIONAL==========================
+// EDITAR PROFISSIONAL
 //=======================================================================
 static Future<(bool, String)> editarProfissional(int id, Map<String, dynamic> dados) async {
   try {
@@ -262,7 +264,7 @@ static Future<(bool, String)> editarProfissional(int id, Map<String, dynamic> da
 }
 
 
-  /// ✅ 4. EXCLUIR PROFISSIONAL (com tratamento robusto de resposta)
+  /// EXCLUIR PROFISSIONAL 
 static Future<(bool, String)> excluirProfissional(int id) async {
   try {
     final response = await http.post(
@@ -303,7 +305,7 @@ static Future<(bool, String)> excluirProfissional(int id) async {
   // ======================= ATIVIDADES ============================
   // ===============================================================
 
-  /// 🔹 Listar todas as atividades
+  /// Listar todas as atividades
   static Future<List<dynamic>> listarAtividades() async {
     try {
       final response = await http.post(
@@ -323,7 +325,7 @@ static Future<(bool, String)> excluirProfissional(int id) async {
     return [];
   }
 
-  /// 🔹 Buscar detalhes de uma atividade específica
+  ///  Buscar detalhes de uma atividade específica
   static Future<Map<String, dynamic>?> detalharAtividade(
       int idAtividade) async {
     try {
@@ -342,7 +344,7 @@ static Future<(bool, String)> excluirProfissional(int id) async {
     return null;
   }
 
-  /// 🔹 Criar nova atividade (com upload de imagem)
+  ///  Criar nova atividade (com upload de imagem)
   static Future<(bool, String)> criarAtividade({
     required String tituloAtividade,
     required String descAtividade,
@@ -382,7 +384,7 @@ static Future<(bool, String)> excluirProfissional(int id) async {
     }
   }
 
-  /// 🔹 Editar atividade existente
+  ///  Editar atividade existente
   static Future<(bool, String)> editarAtividade({
     required int idAtividade,
     required String tituloAtividade,
@@ -420,7 +422,7 @@ static Future<(bool, String)> excluirProfissional(int id) async {
     }
   }
 
-  /// 🔹 Excluir atividade
+  /// Excluir atividade
   static Future<(bool, String)> excluirAtividade(int idAtividade) async {
     try {
       final response = await http.post(
@@ -438,7 +440,7 @@ static Future<(bool, String)> excluirProfissional(int id) async {
     }
   }
 
-  /// 🔹 Usuário participa de uma atividade
+  ///  Usuário participa de uma atividade
   static Future<(bool, String)> participarAtividade({
     required int idUsuario,
     required int idAtividade,
