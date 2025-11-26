@@ -1,9 +1,6 @@
 //ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-// Importação necessária para SharedPreferences (usado internamente pelo AuthService)
-//import 'package:shared_preferences/shared_preferences.dart'; 
-
 // Importação do serviço de autenticação para buscar o ID da sessão
 import '/services/auth_service.dart'; 
 import '/services/agenda_service.dart';
@@ -135,7 +132,7 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
   }*/
 
   /// 📋 REALIZAR CONSULTA (abre modal)
-  /// ✏️ REMARCAR (abre modal)
+  
   void _realizarConsulta(Map agenda) {
     if (_currentUserId != null) {
         _controller.abrirAtendeModal(context, agenda).then((_) => _carregarAgendasComFiltro(_currentUserId!));
@@ -270,7 +267,7 @@ class _MinhaAgendaScreenState extends State<MinhaAgendaScreen> {
                                     // Determina o título baseado em quem está logado
                                     final titulo = _currentUserId == usuarioId
                                         ? 'Com o Profissional: $profissionalNome' 
-                                        : 'Para o Usuário: $usuarioNome'; 
+                                        : 'Com Usuário: $usuarioNome'; 
 
                                     return Card(
                                       child: ListTile(

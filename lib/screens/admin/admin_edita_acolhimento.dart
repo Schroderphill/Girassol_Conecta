@@ -44,6 +44,7 @@ class _AdmEditAcolhimentoState extends State<AdmEditAcolhimento> {
       final service = AcolhimentoService();
       final lista = await service.fetchAcolhimentoView(
         status: filtro,
+        idSessao: null
       );
 
       setState(() {

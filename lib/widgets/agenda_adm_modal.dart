@@ -312,6 +312,63 @@ class AgendaAdmModals {
     );
   }
 
+//============================================================
+  //MODAL VER  PRONTUÁRIO
+  //============================================================
+
+  static Future<void> showProntuarioModal({
+    required BuildContext context,
+    required TextEditingController anotaAtendimentoCtrl,    
+   // required VoidCallback onSave,
+  }) async {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          title: const Text(
+            "Prontuário do Atendimento",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
+            width: 420,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Anotações da Sessão:", style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10), //espaçamento
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: anotaAtendimentoCtrl,
+                        //readOnly: true,
+                        maxLines: 5, // Adicionado: Suporte a múltiplas linhas para anotações
+                        keyboardType: TextInputType.multiline, // Adicionado: Teclado adaptado
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                ],
+                ),
+                const SizedBox(height: 20),                               
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Fechar"),
+            ),            
+          ],
+        );
+      },
+    );
+  }
+
   // =============================================================
   // 4) MODAL DE CANCELAMENTO DO AGENDAMENTO
   // =============================================================

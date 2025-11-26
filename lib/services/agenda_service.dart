@@ -57,7 +57,7 @@ class AgendaService {
         Uri.parse(baseUrl),
         body: {
           'action': 'agenda_view',
-          if (tipoProfissional != null) 'tipoProfissional': tipoProfissional,
+          if (tipoProfissional != null) 'tipoProfissional': tipoProfissional,          
           if (idSessao != null) 'idSessao': idSessao,
         },
       );
@@ -79,6 +79,42 @@ class AgendaService {
       }
     } catch (e) {
       _logger.e('Error fetching agenda view: $e');
+      rethrow;
+    }
+  }
+
+  /// 🔹 Buscar prontuarios com INNER JOIN (view)
+  Future<List<dynamic>> fetchProntuarioView({
+    String? status,
+    String? idSessao,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse(baseUrl),
+        body: {
+          'action': 'prontuario_view', // Alterado a action
+         if (status != null) 'Status': status,
+          if (idSessao != null) 'idSessao': idSessao,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
+        if (decoded['success'] == true) {
+          final List<dynamic> data = decoded['data'];
+          _logger.i('Fetched ${data.length} acolhimentos view com sucesso.');
+          return data;
+        } else {
+          _logger.w('Acolhimento view retornou erro: ${decoded['message']}');
+          return [];
+        }
+      } else {
+        _logger.e(
+            'Failed to load acolhimento view. Status code: ${response.statusCode}');
+        throw Exception('Failed to load acolhimento view');
+      }
+    } catch (e) {
+      _logger.e('Error fetching acolhimento view: $e');
       rethrow;
     }
   }

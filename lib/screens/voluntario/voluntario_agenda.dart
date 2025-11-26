@@ -2,18 +2,18 @@
 
 import 'package:flutter/material.dart';
 import '/services/agenda_service.dart';
-import '/components/drawers/admin_drawer.dart';
+import '../../components/drawers/voluntario_drawer.dart';
 import '/widgets/dropdown_table.dart';
 import '/components/modais/agendas_controller.dart';
 
-class AdminAgendasScreen extends StatefulWidget {
-  const AdminAgendasScreen({super.key});
+class VoluntarioAgendasScreen extends StatefulWidget {
+  const VoluntarioAgendasScreen({super.key});
 
   @override
-  State<AdminAgendasScreen> createState() => _AdminAgendasScreenState();
+  State<VoluntarioAgendasScreen> createState() => _VoluntarioAgendasScreenState();
 }
 
-class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
+class _VoluntarioAgendasScreenState extends State<VoluntarioAgendasScreen> {
   final AgendasController _controller = AgendasController();
 
   String _tipoProfissionalSelecionado = 'Todos';
@@ -150,7 +150,7 @@ class _AdminAgendasScreenState extends State<AdminAgendasScreen> {
     final totalPaginas = (filtradas.length / _itensPorPagina).ceil();
 
     return Scaffold(
-      drawer: const AdminDrawer(),
+      drawer: const VoluntarioDrawer(),
       appBar: AppBar(
         title: const Text('Agendamentos'),
         actions: [

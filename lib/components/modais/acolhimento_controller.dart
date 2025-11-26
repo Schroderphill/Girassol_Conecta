@@ -117,7 +117,7 @@ class AcolhimentoController {
       _field(familiarDrogasCtrl, "Usa Drogas (Sim/Nao)"),
     ];
 
-    await AcolhimentoAdmModals.showEditFamiliarModal(
+    await AcolhimentoAdmModals.showCreateFamiliarModal(
       context: context,
       nomeUsuario: "Novo familiar de $nomeUsuario",
       formFields: form,
@@ -194,7 +194,7 @@ class AcolhimentoController {
       _field(economicoUsaDrogasCtrl, "Usa Drogas (Sim/Nao)"),
     ];
 
-    await AcolhimentoAdmModals.showEditEconomicoModal(
+    await AcolhimentoAdmModals.showCreateEconomicoModal(
       context: context,
       nomeUsuario: "Cadastro socioeconômico de $nomeUsuario",
       formFields: form,
@@ -230,7 +230,7 @@ class AcolhimentoController {
   }
 
    /// =============================================
-  /// 6) ABRIR MODAL DE CANCELAMENTO
+  /// 6) ABRIR MODAL DE FIM DE ACOLHIMENTO
   /// =============================================
   Future<void> abrirFimAcolhimentoModal(BuildContext context, String idAtendimento) async {
     await AcolhimentoAdmModals.showFimAcolhimentoModal(

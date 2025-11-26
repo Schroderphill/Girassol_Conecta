@@ -3,16 +3,16 @@
 import 'package:flutter/material.dart';
 import '/services/auth_service.dart'; //importo pra pegar ID
 import '/services/agenda_service.dart';
-import '/components/drawers/usuario_drawer.dart';
+import '/components/drawers/voluntario_drawer.dart';
 
-class UsuarioAgendaScreen extends StatefulWidget {
-  const UsuarioAgendaScreen({super.key});
+class VoluntarioMinhaAgendaScreen extends StatefulWidget {
+  const VoluntarioMinhaAgendaScreen({super.key});
 
   @override
-  State<UsuarioAgendaScreen> createState() => _UsuarioAgendaScreenState();
+  State<VoluntarioMinhaAgendaScreen> createState() => _VoluntarioMinhaAgendaScreenState();
 }
 
-class _UsuarioAgendaScreenState extends State<UsuarioAgendaScreen> {
+class _VoluntarioMinhaAgendaScreenState extends State<VoluntarioMinhaAgendaScreen> {
   // Removido: final AgendasController _controller = AgendasController();
   
   String? _currentUserId; 
@@ -138,7 +138,7 @@ class _UsuarioAgendaScreenState extends State<UsuarioAgendaScreen> {
     final totalPaginas = (filtradas.length / _itensPorPagina).ceil();
 
     return Scaffold(
-      drawer: const UsuarioDrawer(), 
+      drawer: const VoluntarioDrawer(), 
       appBar: AppBar(
         title: const Text('Minha Agenda'), 
         actions: [

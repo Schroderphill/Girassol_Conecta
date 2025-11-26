@@ -220,8 +220,8 @@ class AcolhimentoAdmModals {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           title: Text(
-            "Novo Cadastro Socioeconômico para $nomeUsuario",
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+            "Cadastro Socioeconômico para $nomeUsuario",
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
           ),
           content: SizedBox(
             width: 550, // Um pouco maior para os campos de endereço
@@ -242,7 +242,7 @@ class AcolhimentoAdmModals {
             ),
             ElevatedButton(
               onPressed: onSave,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: const Text("Cadastrar Dados"),
             ),
           ],

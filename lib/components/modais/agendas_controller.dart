@@ -191,6 +191,31 @@ class AgendasController {
     );
   }
 
+
+  Future<void> abrirProntuarioModal(BuildContext context, Map agenda) async {
+    anotaAtendimentoCtrl.text = agenda["AnotaAtendimento"] ?? '';
+    //horaCtrl.text = agenda["HoraAtendimento"] ?? '';
+
+    await AgendaAdmModals.showProntuarioModal(
+      context: context,
+      anotaAtendimentoCtrl: anotaAtendimentoCtrl,
+      
+      /*onSave: () async {
+        await _service.updateAgenda(
+          agenda["idAtendimento"].toString(),
+          {
+            "AnotaAtendimento": anotaAtendimentoCtrl.text,
+            //"HoraAtendimento": horaCtrl.text,
+            "Status": "Finalizado",
+          },
+        );
+
+        Navigator.pop(context);
+        alerta(context, "Atendimento Finalizado!");
+      },*/
+    );
+  }
+
   /// =============================================
   /// 6) ABRIR MODAL DE CANCELAMENTO
   /// =============================================

@@ -14,6 +14,7 @@ import 'screens/admin/admin_atividades.dart';
 import '/screens/admin/admin_acolhimento.dart';
 import 'screens/admin/admin_minha_agenda.dart';
 import 'screens/admin/admin_edita_acolhimento.dart';
+import 'screens/admin/admin_prontuario.dart';
 
 //import 'screens/usuario/usuario_atendimento.dart';
 //===========USUARIO===============
@@ -23,7 +24,11 @@ import 'screens/usuario/usuario_minha_agenda.dart';
 import 'screens/usuario/usuario_atendimento.dart';
 
 //============VOLUNTARIO==============
-
+import 'screens/voluntario/voluntario_atividades.dart';
+import 'screens/voluntario/voluntario_perfil.dart';
+import 'screens/voluntario/voluntario_minha_agenda.dart';
+import 'screens/voluntario/voluntario_atendimento.dart';
+import 'screens/voluntario/voluntario_agenda.dart';
 
 //============PROFISSIONAL===============
 
@@ -55,7 +60,15 @@ class GirassolConectaApp extends StatelessWidget {
         '/usuario_atendimento': (context) => const UsuarioAtendimento(),
          // '/overview': (context) => const OverviewScreen(),
 
-       ////|-----------------Profissional----------------| 
+
+       ////|-----------------voluntário----------------| 
+       '/voluntario': (context) => const VoluntarioAtividades(),
+       '/voluntario_perfil': (context) => const VoluntarioPerfil(),
+        '/voluntario_agenda': (context) => const VoluntarioAgendasScreen(),
+        '/voluntario_minha_agenda': (context) => const VoluntarioMinhaAgendaScreen(),
+        '/voluntario_atendimento': (context) => const VoluntarioAtendimento(),
+       ///
+       ///|-----------------Profissional----------------|  
         //'/profissional': (context) => const ProfissionaisScreen(),
 
         //|-----------------Admin----------------|
@@ -68,6 +81,7 @@ class GirassolConectaApp extends StatelessWidget {
         '/admin_agenda': (context) => const AdminAgendasScreen(),
         '/minha_agenda': (context) => const MinhaAgendaScreen(),
         '/feed': (context) => const AdminAtividades(),
+        '/admin_prontuario': (context) => const AdminProntuarioScreen(),
 
         // daqui você pode ir adicionando as outras:
         // '/acolhimento': (context) => const AcolhimentoScreen(),

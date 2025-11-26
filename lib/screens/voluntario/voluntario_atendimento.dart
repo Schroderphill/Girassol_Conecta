@@ -8,7 +8,7 @@ import '/services/agenda_service.dart';
 
 // Layout e Drawers do usuário
 import '/components/layout.dart';
-import '../../components/drawers/usuario_drawer.dart';
+import '../../components/drawers/voluntario_drawer.dart';
 
 
 // =======================================================
@@ -40,14 +40,14 @@ class Profissional {
 //  TELA DE SOLICITAÇÃO DE ATENDIMENTO
 // =======================================================
 
-class UsuarioAtendimento extends StatefulWidget {
-  const UsuarioAtendimento({super.key});
+class VoluntarioAtendimento extends StatefulWidget {
+  const VoluntarioAtendimento({super.key});
 
   @override
-  State<UsuarioAtendimento> createState() => _UsuarioAtendimentoState();
+  State<VoluntarioAtendimento> createState() => _VoluntarioAtendimentoState();
 }
 
-class _UsuarioAtendimentoState extends State<UsuarioAtendimento> {
+class _VoluntarioAtendimentoState extends State<VoluntarioAtendimento> {
   final Logger _logger = Logger();
   List<Profissional> _profissionais = [];
   bool _isLoading = true;
@@ -158,13 +158,13 @@ class _UsuarioAtendimentoState extends State<UsuarioAtendimento> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Layout(
-        drawer: UsuarioDrawer(),
+        drawer: VoluntarioDrawer(),
         content: Center(child: CircularProgressIndicator()),
       );
     }
 
     return Layout(
-      drawer: const UsuarioDrawer(),
+      drawer: const VoluntarioDrawer(),
       content: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),

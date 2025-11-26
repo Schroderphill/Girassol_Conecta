@@ -45,6 +45,7 @@ class _AdmAcolhimentoScreenState extends State<AdmAcolhimentoScreen> {
       final service = AcolhimentoService();
       final lista = await service.fetchAcolhimentoView(
         status: filtro,
+        idSessao: null
       );
 
       setState(() {

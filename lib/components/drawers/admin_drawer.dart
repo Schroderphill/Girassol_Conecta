@@ -30,34 +30,23 @@ class AdminDrawer extends StatelessWidget {
               _subItem(context, "Edita Acolhimento", '/editar_acolhimento'),
             ],
           ),
-          //_item(context, Icons.favorite_border, "Acolhimento", '/acolhimento'),
-
-          _item(context, Icons.medical_services, "Profissional", '/profissional'),
-          _item(context, Icons.group_outlined, "Usuarios", '/usuarios_gestao'),
-          //_item(context, Icons.calendar_today_outlined, "Agenda", '/admin_agenda'),
-          
-          //_item(context, Icons.group_outlined, "Voluntários", '/voluntarios'),
-          /*ExpansionTile(
-            leading: const Icon(Icons.support_agent_outlined),
-            title: const Text("Atendimentos"),
-            children: [
-              _subItem(context, "Solicitações Atendimentos", '/solicitacao_atendimento'),
-              _subItem(context, "Prontuarios", '/prontuarios'),
-            ],
-          ),*/
 
           ExpansionTile(
             leading: const Icon(Icons.calendar_today_outlined),
             title: const Text("Agenda"),
             children: [
               _subItem(context, "Agenda Geral", '/admin_agenda'),
-              _subItem(context, "Minha Agenda", '/minha_agenda'),
-              //_subItem(context, "Psicólogo", '/agenda_psicologo'),
+              _subItem(context, "Minha Agenda", '/minha_agenda'),             
             ],
           ),
+                    
+          _item(context, Icons.feed_outlined, "Prontuários", '/admin_prontuario'),
 
+          _item(context, Icons.medical_services, "Profissional", '/profissional'),
+          _item(context, Icons.group_outlined, "Usuarios", '/usuarios_gestao'),
+                    
            ExpansionTile(
-            leading: const Icon(Icons.feed_outlined),
+            leading: const Icon(Icons.featured_play_list_outlined),
             title: const Text("Atividades"),
             children: [
               _subItem(context, "Feed", '/feed'),

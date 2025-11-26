@@ -226,7 +226,7 @@ class UserAdmModal {
     final contatoController = TextEditingController();
     final emailController = TextEditingController();
     final senhaController = TextEditingController();
-    final useridVoluntarioController = TextEditingController();
+   // final useridVoluntarioController = TextEditingController();
 
     return showDialog<Map<String, dynamic>>(
       context: context,
@@ -284,12 +284,12 @@ class UserAdmModal {
                   decoration: const InputDecoration(labelText: 'Senha'),
                 ),
                 const SizedBox(height: 10),
-                TextField(
+               /* TextField(
                   controller: useridVoluntarioController,
                   decoration:
                       const InputDecoration(labelText: 'UseridVoluntario (id ou vazio)'),
                   keyboardType: TextInputType.number,
-                ),
+                ),*/
               ],
             ),
           ),
@@ -322,9 +322,9 @@ class UserAdmModal {
                   'Contato': contatoController.text.isEmpty ? null : contatoController.text,
                   'Email': emailController.text,
                   'Senha': senhaController.text,
-                  'UseridVoluntario': useridVoluntarioController.text.isEmpty
+                  /*'UseridVoluntario': useridVoluntarioController.text.isEmpty
                       ? null
-                      : useridVoluntarioController.text,
+                      : useridVoluntarioController.text,*/
                 });
               },
               child: const Text('Cadastrar'),
